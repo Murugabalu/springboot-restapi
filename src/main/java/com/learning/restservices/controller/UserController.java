@@ -3,10 +3,14 @@ package com.learning.restservices.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +27,7 @@ import com.learning.restservices.exceptions.UserNotFoundException;
 import com.learning.restservices.service.UserService;
 
 @RestController
+@Validated
 public class UserController {
 	
 	@Autowired
@@ -34,7 +39,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder builder){
+	public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
 		try {
 			userService.createUser(user);
 			HttpHeaders headers = new HttpHeaders();
@@ -46,7 +51,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/{id}")
-	public Optional<User> getUserById(@PathVariable("id") Long id){
+	public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id){
 		try {
 			return userService.getUserById(id);
 		} catch(UserNotFoundException ex) {
@@ -70,8 +75,12 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/byUsername/{user_name}")
-	public User getUserByUsername(@PathVariable String user_name){
-		return userService.getUserByUserName(user_name);
+	public User getUserByUsername(@PathVariable String user_name) throws UserNotFoundException{
+		User user = userService.getUserByUserName(user_name);
+		if(user==null) {
+			throw new UserNotFoundException(String.format("Username '%s' not found in the repository.", user_name));
+		}
+		return user;
 	}
 
 }
