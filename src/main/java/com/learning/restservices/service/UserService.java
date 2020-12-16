@@ -26,7 +26,7 @@ public class UserService {
 
 	public User createUser(User user) throws UserAlreadyExistsException {
 		// TODO Auto-generated method stub
-		User existingUser = userRepository.findByUsername(user.getUser_name());
+		User existingUser = userRepository.findByUsername(user.getUsername());
 		if(existingUser!=null)
 			throw new UserAlreadyExistsException("User already exits in the repository, try a diff User.");
 		return userRepository.save(user);

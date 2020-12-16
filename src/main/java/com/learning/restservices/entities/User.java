@@ -1,9 +1,12 @@
 package com.learning.restservices.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -36,6 +39,9 @@ public class User {
 	@Column(name="SSN", length=50, nullable=false, unique=true)
 	private String ssn;
 	
+	@OneToMany(mappedBy = "user")
+	private List<Order> orders;
+	
 	public User() {
 		
 	}
@@ -58,29 +64,6 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUser_name() {
-		return username;
-	}
-
-	public void setUser_name(String user_name) {
-		this.username = user_name;
-	}
-
-	public String getFirst_name() {
-		return firstname;
-	}
-
-	public void setFirst_name(String first_name) {
-		this.firstname = first_name;
-	}
-
-	public String getLast_name() {
-		return lastname;
-	}
-
-	public void setLast_name(String last_name) {
-		this.lastname = last_name;
-	}
 
 	public String getEmail() {
 		return email;
@@ -104,6 +87,38 @@ public class User {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 
 	@Override
